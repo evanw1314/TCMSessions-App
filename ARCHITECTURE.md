@@ -119,25 +119,3 @@ recordings:
 Read [`docs/eeg-aperiodic-correction.md`](docs/eeg-aperiodic-correction.md)
 before changing the pipeline. The dated evidence is in
 [`docs/archive/eeg-lab-notebook.md`](docs/archive/eeg-lab-notebook.md).
-
-## Not built yet
-
-- **Headband assignment in the apps.** `POST/DELETE /headbands` exist and are
-  tested, but neither app calls them, so the "this headband is assigned to
-  this patient" check never runs in practice. Wire it up before more than
-  one patient's headband is in circulation.
-- **A live session view** (scrolling graph, draft and publish, chunked
-  upload). Android records without one. The design is in
-  [`docs/muse-sessions.md`](docs/muse-sessions.md); it would need new server
-  work.
-- **Hosting.** The target is Google Cloud (Cloud Run, Cloud SQL, a Cloud
-  Storage bucket); the code is ready and the steps are in
-  [`docs/cloud-deploy.md`](docs/cloud-deploy.md). The server currently runs
-  on a development machine on the clinic network.
-
-## Third-party constraints
-
-The Muse SDK (libmuse 8.0.9) is under a restrictive Interaxon license: it may
-not be redistributed, so it is never committed and there is no mirror. The
-integrated binaries are gitignored (`android/TcmSessionApp/app/libs`,
-`jniLibs/`, `ios/Vendor/`), and the apps can't be built in CI.
