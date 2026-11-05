@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Corner radius scale from the wireframe's -radius/-radius-lg/-radius-xl. -->
+<resources>
+    <dimen name="radius_sm">8dp</dimen>
+    <dimen name="radius_lg">14dp</dimen>
+    <dimen name="radius_xl">20dp</dimen>
+</resources>

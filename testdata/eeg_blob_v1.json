@@ -1,0 +1,42 @@
+{
+  "_about": "Raw-EEG upload format v1 (server/app/eeg/binary.py). eeg_blob_v1.bin packs these samples; null means NaN (bad contact). Android's EegBinaryWriter must produce exactly these bytes and the server must read them back as exactly these values.",
+  "channel_count": 4,
+  "samples": [
+    {
+      "timestamp_us": 1700000000000000,
+      "values": [
+        12.5,
+        -3.25,
+        0.0,
+        841.0
+      ]
+    },
+    {
+      "timestamp_us": 1700000000003906,
+      "values": [
+        12.75,
+        -3.0,
+        null,
+        840.5
+      ]
+    },
+    {
+      "timestamp_us": 1700000000007812,
+      "values": [
+        13.0,
+        -2.75,
+        0.5,
+        840.0
+      ]
+    },
+    {
+      "timestamp_us": 1700000000011718,
+      "values": [
+        -1024.0,
+        0.001,
+        1.0,
+        839.5
+      ]
+    }
+  ]
+}

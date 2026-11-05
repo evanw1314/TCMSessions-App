@@ -1,0 +1,20 @@
+line-length = 120
+target-version = "py313"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    # FastAPI's dependency injection is a call in a default argument by design.
+    "B008",
+    # Routers translate a caught error into an HTTPException on purpose; the
+    # original traceback adds nothing to the client's answer.
+    "B904",
+    # StrEnum changes str(Role.patient) from "Role.patient" to "patient";
+    # not worth auditing every f-string and log line for a lint preference.
+    "UP042",
+]
+
+[lint.per-file-ignores]
+# Alembic writes these; keep them as generated so a diff against
+# `alembic revision --autogenerate` stays readable.
+"migrations/versions/*" = ["E501", "I001", "UP"]

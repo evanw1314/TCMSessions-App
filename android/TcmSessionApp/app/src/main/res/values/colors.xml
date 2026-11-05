@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app's light palette, ported from the design wireframe's CSS custom
+     properties. Keep this file and values-night/colors.xml as a matched pair: every
+     name here must also exist there, same semantic role, dark-mode value. -->
+<resources>
+    <color name="bg">#F5F7F7</color>
+    <color name="surface_1">#FFFFFF</color>
+    <color name="surface_2">#EEF2F1</color>
+    <color name="surface_3">#E4E9E8</color>
+    <color name="border">#D8DEDD</color>
+    <color name="border_strong">#C2CBC9</color>
+    <color name="text_primary">#16211F</color>
+    <color name="text_secondary">#5B6B68</color>
+    <color name="text_muted">#8B9997</color>
+    <color name="accent">#2F6B8F</color>
+    <color name="accent_bg">#E4EEF3</color>
+    <color name="accent_border">#B9D2E0</color>
+    <color name="on_accent">#FFFFFF</color>
+    <color name="success">#1D9E75</color>
+    <color name="success_bg">#E1F4EC</color>
+    <color name="warning">#B8862E</color>
+    <color name="warning_bg">#F7EDDA</color>
+    <color name="critical">#C8503A</color>
+    <color name="critical_bg">#FBE7E3</color>
+</resources>

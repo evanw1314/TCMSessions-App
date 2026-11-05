@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark counterpart to values/colors.xml — same names, wireframe's dark palette.
+     Android picks this file automatically in dark mode (DayNight theme); keep
+     every name in sync with the light file. -->
+<resources>
+    <color name="bg">#12171A</color>
+    <color name="surface_1">#1A2124</color>
+    <color name="surface_2">#212A2D</color>
+    <color name="surface_3">#2A3437</color>
+    <color name="border">#313B3E</color>
+    <color name="border_strong">#414D50</color>
+    <color name="text_primary">#EAF1EF</color>
+    <color name="text_secondary">#9BACA9</color>
+    <color name="text_muted">#6C7D7A</color>
+    <color name="accent">#6FA9CC</color>
+    <color name="accent_bg">#1E3240</color>
+    <color name="accent_border">#2F506A</color>
+    <color name="on_accent">#0C1417</color>
+    <color name="success">#4BC79A</color>
+    <color name="success_bg">#173129</color>
+    <color name="warning">#D9A75A</color>
+    <color name="warning_bg">#332A16</color>
+    <color name="critical">#E1806D</color>
+    <color name="critical_bg">#3A1E1A</color>
+</resources>

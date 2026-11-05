@@ -1,0 +1,32 @@
+# What `gcloud run deploy --source server` uploads to Cloud Build
+# (docs/cloud-deploy.md). Without this file gcloud uploads the whole folder -
+# .dockerignore filters the image, not the upload - so from the Mac that would
+# include real secrets, the database and patients' raw EEG. Check before
+# deploying: `gcloud meta list-files-for-upload server`.
+.gcloudignore
+
+# Secrets and local state.
+.env
+.jwt_secret
+*.db
+*.db-journal
+backups/
+data/
+exports/
+*.log
+server_*.txt
+
+# Dev-machine cruft.
+.git/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.idea/
+.vscode/
+
+# Not needed to build or run the server.
+tests/
+tools/
+export_tcm_data.py
+start_server.ps1

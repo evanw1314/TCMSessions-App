@@ -1,0 +1,39 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+# Schema migrations (server/migrations/), applied on startup by app/migrate.py.
+alembic>=1.16
+# Postgres driver — only imported when DATABASE_URL is postgresql+psycopg://
+# (SQLite needs no driver, it's stdlib). psycopg3, matching .env.example's
+# example URL; [binary] avoids needing build tools/libpq on the host.
+psycopg[binary]>=3.2
+# Raw EEG recordings in a Cloud Storage bucket when EEG_RAW_BUCKET is set
+# (app/eeg/storage.py, imported only then; the Cloud Run deploy needs it).
+google-cloud-storage>=3.0
+pydantic-settings>=2.4
+email-validator>=2.1
+PyJWT>=2.9
+google-auth>=2.34
+requests>=2.32
+qrcode[pil]>=7.4
+bcrypt>=4.0
+# AI summaries (app/ai_summary.py).
+anthropic>=1.5,<2
+# Voice markers (app/transcription.py) call AssemblyAI with `requests` above;
+# this converts its Simplified-character Mandarin to Traditional for the 繁體
+# toggle. Pure Python, Apache-2.0.
+opencc-python-reimplemented>=0.1.7
+python-multipart>=0.0.9
+# EEG aperiodic-correction pipeline (docs/eeg-aperiodic-correction.md,
+# app/eeg/analysis.py) — on-demand only (POST /sessions/{id}/eeg/analyze),
+# never on the request path for anything else.
+numpy>=2.0
+scipy>=1.13
+mne>=1.8
+# specparam is fooof's current name (see eeg/analysis.py). Pinned to a
+# specific 2.0 pre-release, not a floor on 1.x or a bare "specparam" — the
+# 2.0 API (SpectralModel, results.get_results()) this app's code calls is
+# NOT what fooof/specparam 1.x exposes (that was the FOOOF class with
+# different attribute names), so an unpinned install could land on either
+# API shape. Re-check when 2.0 leaves release-candidate status.
+specparam==2.0.0rc7

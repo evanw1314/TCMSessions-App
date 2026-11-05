@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/text_primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true" />
+        <TextView
+            android:id="@+id/patientNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/connectionStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Not connected"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/museSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/scanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modality"
+        android:textSize="12sp" />
+    <RadioGroup
+        android:id="@+id/modalityGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <RadioButton
+            android:id="@+id/modalityAcupuncture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acupuncture"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/modalityTaiChi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tai chi" />
+        <RadioButton
+            android:id="@+id/modalityHerbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Herbs" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/startSessionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start session"
+        android:enabled="false" />
+
+    <LinearLayout
+        android:id="@+id/recordingGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/recordingClockText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Recording · 00:00" />
+
+        <!-- Baseline prompt: shown while recording until markBaselineEnd() is
+             called (or never, if the practitioner skips it entirely — see
+             SessionRecorder.markBaselineEnd's docstring). -->
+        <LinearLayout
+            android:id="@+id/baselinePromptGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/surface_2"
+            android:padding="10dp"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recording baseline — have the patient sit still with eyes closed, no treatment yet. Aim for 2–3 minutes, same room, headband already on."
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <Button
+                android:id="@+id/baselineEndButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Baseline done — start treatment"
+                android:layout_marginTop="6dp" />
+        </LinearLayout>
+
+        <!-- Once the baseline is marked, the Treatment done prompt moves here
+             from above End session (SessionActivity.renderState), taking the
+             baseline prompt's place. Empty (no height) until then. -->
+        <FrameLayout
+            android:id="@+id/treatmentEndTopSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/baselineRecordedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/treatmentEndRecordedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/bandValuesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addMarkerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Add marker" />
+
+            <Button
+                android:id="@+id/voiceMarkerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="🎤 Speak marker" />
+
+            <Button
+                android:id="@+id/voiceLanguageToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:minWidth="0dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="EN" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/voiceStatusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary" />
+
+        <LinearLayout
+            android:id="@+id/markerListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Session note"
+            android:textSize="12sp" />
+        <EditText
+            android:id="@+id/noteInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:gravity="top"
+            android:hint="Notes for this session..." />
+
+        <!-- Treatment done: tapped once when the treatment itself ends, before
+             the needles come out (SessionRecorder.markTreatmentEnd). The
+             session card's "after" pie uses the minute just before it. Starts
+             in this bottom slot; SessionActivity.renderState moves it up to
+             treatmentEndTopSlot once the baseline is marked. Its margin is on
+             the prompt itself, so whichever slot is empty takes no space. -->
+        <FrameLayout
+            android:id="@+id/treatmentEndBottomSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/treatmentEndPromptGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/surface_2"
+                android:padding="10dp"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When the treatment itself is over, tap this before taking the needles out or talking with the patient. The before/after comparison uses the minute just before this tap."
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+                <Button
+                    android:id="@+id/treatmentEndButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Treatment done"
+                    android:layout_marginTop="6dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/endSessionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="End session and save"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/critical"
+        android:layout_marginTop="12dp" />
+
+</LinearLayout>
+</ScrollView>

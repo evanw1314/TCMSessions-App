@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <!-- Header — mirrors the wireframe's patient-profile title row, collapsed
+         into a top strip since this app has no sidebar (same pattern as
+         activity_patient_list's clinic strip). This app has no ActionBar
+         anywhere (Theme.TcmSessionApp is NoActionBar), so backButton is the
+         only visible way back — the system gesture/button still works too.
+         In self-view (a patient viewing their own record — see
+         PatientDetailActivity.isSelfView) this screen IS the root screen, so
+         backButton is hidden and signOutButton takes its place, mirroring
+         activity_patient_list's signOutButton. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/surface_2"
+        android:paddingStart="4dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/text_primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="4dp">
+
+            <TextView
+                android:id="@+id/patientNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/patientEmailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/signOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:text="Sign out"
+            android:textColor="@color/accent"
+            android:textSize="13sp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/detailTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surface_1"
+        app:tabIndicatorColor="@color/accent"
+        app:tabSelectedTextColor="@color/accent"
+        app:tabTextColor="@color/text_secondary"
+        app:tabMode="fixed" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- ============ Overview pane ============ -->
+        <ScrollView
+            android:id="@+id/overviewPane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="14dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="5dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/border"
+                        app:cardBackgroundColor="@color/surface_1"
+                        app:cardCornerRadius="@dimen/radius_sm">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Last TCM session"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+                            <TextView
+                                android:id="@+id/tileLastSessionValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/border"
+                        app:cardBackgroundColor="@color/surface_1"
+                        app:cardCornerRadius="@dimen/radius_sm">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sessions logged"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+                            <TextView
+                                android:id="@+id/tileSessionCountValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/border"
+                    app:cardBackgroundColor="@color/surface_1"
+                    app:cardCornerRadius="@dimen/radius_lg">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="RECENT ACTIVITY"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05"
+                            android:textColor="@color/text_muted" />
+                        <LinearLayout
+                            android:id="@+id/recentActivityContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/aiOverviewCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/border"
+                    app:cardBackgroundColor="@color/surface_1"
+                    app:cardCornerRadius="@dimen/radius_lg">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="AI OVERVIEW"
+                                android:textSize="10.5sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.05"
+                                android:textColor="@color/text_muted" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/summarizeButton"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="34dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:text="Summarize"
+                                android:textSize="12sp"
+                                android:textAllCaps="false"
+                                android:textColor="@color/accent"
+                                app:strokeColor="@color/accent_border"
+                                app:cornerRadius="@dimen/radius_sm" />
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/summaryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Tap Summarize for a plain-language overview of this patient's recent sessions and notes."
+                            android:textSize="12.5sp"
+                            android:textColor="@color/text_secondary" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="AI-generated from this practitioner's own notes and sessions — a description, not a clinical recommendation."
+                            android:textSize="10.5sp"
+                            android:textColor="@color/text_muted" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/removePatientCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/critical"
+                    app:cardBackgroundColor="@color/critical_bg"
+                    app:cardCornerRadius="@dimen/radius_lg">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Remove this patient"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/critical" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Takes them off your patient list and ends any headband assignment you hold for them. Their account, sessions, and notes are kept — you can add them back later."
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp" />
+                        <Button
+                            android:id="@+id/removePatientButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Remove patient"
+                            android:textSize="14sp"
+                            android:textColor="@color/critical"
+                            app:strokeColor="@color/critical"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ============ TCM sessions pane ============ -->
+        <LinearLayout
+            android:id="@+id/tcmPane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/exportAllButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:gravity="center"
+                    android:text="Export all"
+                    android:textColor="@color/accent"
+                    android:textSize="13sp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true" />
+                <!-- Self-view (a patient viewing their own record) hides this
+                     directly, not via a wrapping container, since it's the
+                     only write action in this row — exportAllButton stays
+                     (a read/export action, not a write). -->
+                <TextView
+                    android:id="@+id/newSessionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:gravity="center"
+                    android:text="New session"
+                    android:textColor="@color/accent"
+                    android:textSize="13sp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/sessionsEmptyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:padding="28dp"
+                android:visibility="gone"
+                android:text="No sessions recorded yet — tap &quot;New session&quot; to start one." />
+
+            <!-- First load only (see PatientDetailActivity.loadSessions) — a resume-
+                 triggered refresh with rows already on screen never shows this. -->
+            <ProgressBar
+                android:id="@+id/sessionsLoadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sessionRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <!-- ============ Notes pane ============ -->
+        <LinearLayout
+            android:id="@+id/notesPane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Hidden wholesale in self-view (a patient viewing their own
+                 record can't compose notes — see PatientDetailActivity's
+                 isSelfView handling). -->
+            <LinearLayout
+                android:id="@+id/noteComposerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <EditText
+                    android:id="@+id/noteInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="top|start"
+                    android:background="@drawable/bg_field"
+                    android:padding="11dp"
+                    android:hint="General note about this patient..."
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_muted"
+                    android:textSize="13.5sp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addNoteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:text="Add note"
+                    android:textColor="@color/on_accent"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/accent"
+                    app:cornerRadius="@dimen/radius_sm" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:text="Tap a note below to delete it"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_muted" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/border" />
+
+            <TextView
+                android:id="@+id/notesEmptyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:padding="28dp"
+                android:visibility="gone"
+                android:text="No notes yet." />
+
+            <!-- First load only (see PatientDetailActivity.loadNotes). -->
+            <ProgressBar
+                android:id="@+id/notesLoadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/noteRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <!-- ============ EEG trend pane — practitioner-only, tab is never added in
+             self-view (see PatientDetailActivity.onCreate), same gating as
+             the single-session EEG analysis card. The chart is one line per
+             period (earlier/later half) across analyzed sessions; the exact
+             numbers (offset, r², epoch count) stay in the plain list below
+             it, same "chart for the shape, table for the numbers" split as
+             SessionDetailActivity's band chart + stats table. ============ -->
+        <LinearLayout
+            android:id="@+id/eegTrendPane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:text="Background steepness and slow eye movements across this patient's analyzed sessions, oldest first. Compare this patient only with their own earlier sessions — never with other patients. Background steepness varies more from one session to the next than between the two halves of one session."
+                android:textSize="11.5sp"
+                android:textColor="@color/text_muted" />
+
+            <LinearLayout
+                android:id="@+id/eegTrendChartControls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Metric:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+                <Spinner
+                    android:id="@+id/eegTrendMetricSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <ai.meridian.tcmsession.EegMetricChartView
+                android:id="@+id/eegTrendChartView"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:focusable="true"
+                android:importantForAccessibility="yes" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/border" />
+
+            <TextView
+                android:id="@+id/eegTrendEmptyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:padding="28dp"
+                android:visibility="gone"
+                android:text="No analyzed sessions yet — analyze a session's EEG from its detail screen to see it here." />
+
+            <!-- First load only (see PatientDetailActivity.loadEegTrend). -->
+            <ProgressBar
+                android:id="@+id/eegTrendLoadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:id="@+id/eegTrendContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp" />
+            </ScrollView>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

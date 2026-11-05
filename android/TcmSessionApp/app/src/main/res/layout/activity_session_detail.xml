@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Root is a FrameLayout, not a bare ScrollView, so loadingIndicator can
+     overlay the (empty) content while GET /sessions/{id} is still in flight —
+     see SessionDetailActivity.onCreate. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<ScrollView
+    android:id="@+id/contentScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/text_primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/modalityText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/exportButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:text="Export CSV"
+            android:textColor="@color/accent"
+            android:textSize="13sp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <!-- Chart card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Band power over time (uncorrected)"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tap to inspect:"
+                    android:textSize="11sp" />
+                <Spinner
+                    android:id="@+id/bandSelectSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+            <ai.meridian.tcmsession.BandChartView
+                android:id="@+id/bandChartView"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:layout_marginTop="4dp"
+                android:focusable="true"
+                android:importantForAccessibility="yes" />
+            <!-- Same caveat as the stats card below and the EEG analysis
+                 card's own subtitle — this chart is real per-second data,
+                 useful for spotting the session's shape/gaps/artifacts, but
+                 the raw values themselves are not a measure of relaxation or
+                 treatment response (docs/eeg-aperiodic-correction.md). -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Dominated by the non-rhythmic (1/f) background, not a validated measure of relaxation or treatment response — see EEG analysis below for the corrected numbers, if this session has been analyzed."
+                android:textSize="10.5sp"
+                android:textColor="@color/text_muted" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Band power stats card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Band power summary (uncorrected)"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <TableLayout
+                android:id="@+id/bandStatsTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:stretchColumns="1,2,3" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Relative power (percentages of one reading, not physical units) — one band rising mechanically forces the others down. A rise in delta/theta/alpha with a fall in beta/gamma is the single most common EEG pattern from drowsiness or a sensor slipping, not evidence of anything specific to this session."
+                android:textSize="10.5sp"
+                android:textColor="@color/text_muted" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Before/after band-share card: BandShares' two one-minute pies, built
+         in code by SessionDetailActivity.renderBandShareCard. Shown in the
+         patient's self-view too, in their own wording (BandShareWords). -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bandShareCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <!-- Set per session and per reader by renderBandShareCard
+                 (BandShareWords.heading). -->
+            <TextView
+                android:id="@+id/bandShareTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Band share (uncorrected)"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/bandShareContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Markers card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Markers"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/markersChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipSpacingHorizontal="6dp"
+                app:chipSpacingVertical="6dp" />
+            <TextView
+                android:id="@+id/markersEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(none)"
+                android:textColor="@color/text_muted"
+                android:visibility="gone" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- EEG analysis card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/eegAnalysisCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="EEG analysis (experimental)"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/analyzeEegButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Analyze EEG"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/accent"
+                    app:strokeColor="@color/accent_border"
+                    app:cornerRadius="@dimen/radius_sm" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/eegAnalysisStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Separates real brain rhythms from the steady background activity that dominates the band-power chart above. That chart can't tell a real change from drowsiness or a sensor slipping. This analysis flags some loose sensors and eye activity, but it still can't tell drowsiness from other causes. Tap Analyze to run it on this session's raw recording, if one was captured."
+                android:textSize="12.5sp"
+                android:textColor="@color/text_secondary" />
+            <LinearLayout
+                android:id="@+id/eegAnalysisResultsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp"
+                android:visibility="gone" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="&quot;Rhythms: none found&quot;, or a band missing from the table, means the app looked and found no real rhythm there, not that something failed. &quot;Can't be checked&quot; is different: the recording was too poor to look."
+                android:textSize="10.5sp"
+                android:textColor="@color/text_muted" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- AI overview card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/aiOverviewCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="AI overview"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/summarizeSessionButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Summarize"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/accent"
+                    app:strokeColor="@color/accent_border"
+                    app:cornerRadius="@dimen/radius_sm" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/sessionSummaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Tap Summarize for a plain-language overview of this session's markers and band-power trend."
+                android:textSize="12.5sp"
+                android:textColor="@color/text_secondary" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="AI-generated — a description, not a clinical recommendation."
+                android:textSize="10.5sp"
+                android:textColor="@color/text_muted" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Practitioner note card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Practitioner note"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/noteEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:gravity="top"
+                android:hint="Add a note about this session..."
+                android:layout_marginTop="4dp" />
+            <Button
+                android:id="@+id/saveNoteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save note"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Danger zone -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/dangerZoneCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/critical"
+        app:cardBackgroundColor="@color/surface_1"
+        app:cardCornerRadius="@dimen/radius_lg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete this session"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/critical" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Removes this session from the app for everyone who can see it. This cannot be undone from the app."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
+            <Button
+                android:id="@+id/deleteSessionButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete session"
+                android:textSize="15sp"
+                android:textColor="@color/critical"
+                app:strokeColor="@color/critical"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
+</ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/accent" />
+
+</FrameLayout>

@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Wires the wireframe's color tokens (values/colors.xml, values-night/colors.xml)
+         into Material/Android theme attributes, so every screen — not just ones we've
+         explicitly reskinned — picks up the accent color and surface/text hierarchy for
+         free. BandChartView and the session-detail stats table already resolve colors via
+         MaterialColors.getColor()/theme attrs, so they adopt this automatically too. -->
+    <style name="Theme.TcmSessionApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/accent</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnPrimary">@color/on_accent</item>
+        <item name="colorSurface">@color/surface_1</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorError">@color/critical</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+</resources>

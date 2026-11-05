@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+ version of backup_rules.xml (see there for why): keeps
+     SessionJournal's recordings/ out of both cloud backups and
+     phone-to-phone transfers. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="file" path="recordings/" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="file" path="recordings/" />
+    </device-transfer>
+</data-extraction-rules>

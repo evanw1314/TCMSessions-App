@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and older (fullBackupContent). Keeps SessionJournal's
+     recordings/ out of Google Drive backups: they are patient EEG, and one
+     restored onto a new phone would be offered for upload again and could
+     create a session the server already has. Everything else backs up
+     normally. data_extraction_rules.xml is the Android 12+ version. -->
+<full-backup-content>
+    <exclude domain="file" path="recordings/" />
+</full-backup-content>

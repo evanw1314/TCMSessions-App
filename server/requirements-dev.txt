@@ -1,0 +1,9 @@
+# Test-only extras: `.venv/bin/pip install -r requirements-dev.txt`, then
+# `.venv/bin/ruff check .` and `.venv/bin/python -m pytest` from server/.
+-r requirements.txt
+pytest>=8
+# The anthropic SDK's HTTP library (it comes with anthropic>=1.5); named
+# here because test_ai_summary.py builds the SDK's error types from it.
+httpx2
+# Pinned: a ruff upgrade can change what a rule flags, so take it on purpose.
+ruff==0.16.10

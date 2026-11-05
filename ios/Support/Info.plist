@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.859022544598-49onfvbg39tqhsv34imlnju2a4qqfhnc</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>859022544598-49onfvbg39tqhsv34imlnju2a4qqfhnc.apps.googleusercontent.com</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Scans a QR code encoding the server address.</string>
+</dict>
+</plist>
+

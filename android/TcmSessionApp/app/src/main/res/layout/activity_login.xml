@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Header + a bordered card: email and password sign-in or account
+     creation (POST /auth/login, POST /auth/register), toggled via
+     modeSignInButton / modeCreateAccountButton, plus "Continue with Google". -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintWidth_max="440dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp"
+            android:gravity="center_horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="TCM Sessions"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:text="In-clinic Muse/TCM session recording"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                app:cardBackgroundColor="@color/surface_1"
+                app:strokeColor="@color/border"
+                app:strokeWidth="1dp"
+                app:cardCornerRadius="@dimen/radius_lg"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center_horizontal"
+                        android:letterSpacing="0.08"
+                        android:text="SIGN IN"
+                        android:textColor="@color/text_muted"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/googleSignInButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="Continue with Google"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_primary"
+                        app:cornerRadius="@dimen/radius_sm"
+                        app:icon="@drawable/ic_google_logo"
+                        app:iconGravity="textStart"
+                        app:iconPadding="10dp"
+                        app:iconTint="@null"
+                        app:strokeColor="@color/border" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:text="— or sign in with email —"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_muted"
+                        android:fontFamily="@font/roboto"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/modeSignInButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:text="Sign in"
+                            android:textAllCaps="false"
+                            android:textSize="12.5sp"
+                            app:strokeColor="@color/border"
+                            app:cornerRadius="@dimen/radius_sm"
+                            android:fontFamily="@font/roboto"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/modeCreateAccountButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:text="Create account"
+                            android:textAllCaps="false"
+                            android:textSize="12.5sp"
+                            app:strokeColor="@color/border"
+                            app:cornerRadius="@dimen/radius_sm"
+                            android:fontFamily="@font/roboto"/>
+                    </LinearLayout>
+
+                    <!-- Role choice only applies to account creation — signing in
+                         resolves the role from the account itself (see
+                         LoginActivity.setCreateAccountMode). Patient sits on the
+                         left and is the default selection since patients are the
+                         far more common signup. -->
+                    <LinearLayout
+                        android:id="@+id/roleGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/rolePatientButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:text="Patient"
+                            android:textAllCaps="false"
+                            android:textSize="12.5sp"
+                            app:strokeColor="@color/border"
+                            app:cornerRadius="@dimen/radius_sm" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/rolePractitionerButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:text="Practitioner"
+                            android:textAllCaps="false"
+                            android:textSize="12.5sp"
+                            app:strokeColor="@color/border"
+                            app:cornerRadius="@dimen/radius_sm" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/roboto"/>
+
+                    <EditText
+                        android:id="@+id/emailInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_field"
+                        android:padding="11dp"
+                        android:hint="you@example.com"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_muted"
+                        android:textSize="13.5sp"
+                        android:layout_marginBottom="14dp"
+                        android:fontFamily="@font/roboto"/>
+
+                    <TextView
+                        android:id="@+id/nameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="4dp"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/nameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_field"
+                        android:padding="11dp"
+                        android:hint="Dr. Jane Smith"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_muted"
+                        android:textSize="13.5sp"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Password"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/roboto"/>
+
+                    <EditText
+                        android:id="@+id/passwordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_field"
+                        android:padding="11dp"
+                        android:hint="At least 8 characters"
+                        android:inputType="textPassword"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_muted"
+                        android:textSize="13.5sp"
+                        android:layout_marginBottom="14dp"
+                        android:fontFamily="@font/roboto"/>
+
+                    <TextView
+                        android:id="@+id/confirmPasswordLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Confirm password"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="4dp"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/confirmPasswordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_field"
+                        android:padding="11dp"
+                        android:hint="Re-enter your password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_muted"
+                        android:textSize="13.5sp"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/submitButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Sign in"
+                        android:textColor="@color/on_accent"
+                        android:textAllCaps="false"
+                        app:backgroundTint="@color/accent"
+                        app:cornerRadius="@dimen/radius_sm"
+                        android:fontFamily="@font/roboto"/>
+
+                    <TextView
+                        android:id="@+id/errorText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/critical"
+                        android:textSize="12.5sp"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/serverSettingsToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:gravity="center"
+                android:layout_marginTop="18dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Server settings ▾"
+                android:textColor="@color/accent"
+                android:textSize="12.5sp" />
+
+            <LinearLayout
+                android:id="@+id/serverSettingsSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/serverHostInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_field"
+                    android:padding="11dp"
+                    android:hint="http://192.168.1.20:8000"
+                    android:inputType="textUri"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_muted"
+                    android:textSize="12.5sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/scanQrButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Scan QR"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_primary"
+                    app:strokeColor="@color/border"
+                    app:cornerRadius="@dimen/radius_sm" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

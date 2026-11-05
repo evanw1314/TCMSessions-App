@@ -1,0 +1,59 @@
+# macOS
+.DS_Store
+
+# Python / server
+server/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+server/smartring.db
+# CSV exports of real patient session data (export_tcm_data.py) — never commit.
+server/exports/
+# .env holds the real JWT_SECRET; .env.example is the template. (GOOGLE_CLIENT_ID
+# is NOT a secret — an iOS OAuth client has no client secret and the ID is baked
+# into every app bundle — so .env.example ships the real one.)
+server/.env
+# Generated local dev signing key (see config.harden_settings) — never commit.
+server/.jwt_secret
+
+# Xcode
+ios/**/xcuserdata/
+DerivedData/
+*.xcuserstate
+
+# Vendor SDK binaries (Muse.framework; obtain per ios/Vendor/README.md)
+ios/Vendor/*.framework
+ios/Vendor/*.xcframework
+
+# Muse (Interaxon) SDK download — NEVER commit. Restrictively licensed under
+# the Interaxon SDK developer agreement, and ~2.3 GB. The integrated framework
+# lives gitignored under ios/Vendor/; the raw download belongs outside the repo.
+# Glob covers "SDK - RDK", "SDK - RDK 2", and any other split-download pieces.
+/SDK - RDK*
+/libmuse_*
+
+# Android
+android/**/build/
+android/**/.gradle/
+android/**/local.properties
+android/**/*.iml
+android/**/.idea/
+
+# Muse SDK vendor binaries (large; obtain per android/TcmSessionApp/README.md)
+android/TcmSessionApp/app/libs/*.jar
+android/TcmSessionApp/app/src/main/jniLibs/
+
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
+
+# Local database backups
+server/backups/
+
+# Raw EEG recordings kept on local disk (eeg/storage.py's EEG_RAW_DIR;
+# a Cloud Storage bucket instead on Cloud Run). Patient data: never commit.
+server/data/eeg_raw/
+
+# Redirected uvicorn output (start_server.ps1, the Windows Task Scheduler
+# launcher, writes server.log / server.err.log)
+server/*.log
+server/server_*.txt

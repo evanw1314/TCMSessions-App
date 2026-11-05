@@ -1,0 +1,20 @@
+# Never bake these into the image — real secrets and local-only state.
+.env
+.jwt_secret
+smartring.db
+backups/
+exports/
+*.log
+server_*.txt
+
+# Dev-machine cruft that shouldn't ship in the image.
+.venv/
+__pycache__/
+*.pyc
+.git/
+.idea/
+.vscode/
+
+# Not needed at runtime.
+export_tcm_data.py
+start_server.ps1

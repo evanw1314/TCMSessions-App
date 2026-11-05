@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Exported session CSV/zip files are written to the cache dir's
+         "exports" subfolder (see ExportUtil), then shared via a
+         content:// URI through this provider — never a raw file:// path,
+         which the share-sheet target apps can no longer open on API 24+. -->
+    <cache-path name="exports" path="exports/" />
+</paths>
