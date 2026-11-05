@@ -71,13 +71,3 @@ generated file**: autogenerate misses renames and never moves data. Keep
 [`docs/reference.md`](docs/reference.md#database-migrations). Back up
 `smartring.db` to `server/backups/` before any destructive change to a
 database you care about.
-
-## Never commit
-
-- The Muse SDK or anything from its download (license; see ARCHITECTURE.md).
-- `server/.env`, `server/.jwt_secret`, API keys or the Gmail app password.
-- Patient data: databases (`server/smartring.db`, `server/backups/`), raw EEG
-  recordings (`server/data/eeg_raw/`) and CSV exports (`server/exports/`).
-
-All of these are gitignored; keep it that way, and check `git status` before
-adding a new kind of file.
