@@ -1,6 +1,6 @@
 # TCM Session App
 
-Prototype for practitioner-run Muse EEG sessions in a TCM clinic. The
+App for practitioner-run Muse EEG sessions in a TCM clinic. The
 practitioner's phone connects to a Muse headband, records brainwave band
 powers, raw EEG and timestamped markers (tapped or spoken) during a
 treatment, and uploads the session to a FastAPI server. The server runs an
@@ -78,9 +78,8 @@ consent screen; ask a maintainer. Password sign-in needs none of that.
 
 ## Credits
 
-Built by Evan Wescott and Aiden Chow at TCMlab, as a prototype for a TCM
-clinic. This public copy is a snapshot of the team's private repository,
-without its commit history or internal notes.
+Built by Evan Wescott at Five Branches University, as an app for a TCM
+clinic.
 
 ## Contributing
 
